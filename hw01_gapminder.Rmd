@@ -33,10 +33,15 @@ str(gapminder)
 summary(gapminder)
 ```
 
-###Average Global Life Expectancy for 1952-2007 (5 year intervals)
+###Global Average Life Expectancy for 1952-2007 (5-year intervals)
 ```{r, echo=F, message=F, warning=F}
 gapminder2 = aggregate(gapminder, by=list(gapminder$year), FUN=mean)
 plot(gapminder2$year, gapminder2$lifeExp, ylab = "Life Expectancy", xlab="Year", col="red", pch=16)
 ```
 
+###Global Average Gross Domestic Product (GDP) Per Capita for 1952-2007 (5-year intervals)
+```{r, echo=F, message=F, warning=F}
+gapminder2 = aggregate(gapminder, by=list(gapminder$year), FUN=mean)
+plot(gapminder2$year, gapminder2$gdpPercap, ylab = "GDP per capita", xlab="Year", col="green", pch=16)
+```
 

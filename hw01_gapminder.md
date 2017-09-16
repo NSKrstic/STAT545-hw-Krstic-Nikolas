@@ -59,6 +59,10 @@ Exploring the gapminder dataset
     ##  Max.   :1.319e+09   Max.   :113523.1  
     ## 
 
-### Average Global Life Expectancy for 1952-2007 (5 year intervals)
+### Global Average Life Expectancy for 1952-2007 (5 year intervals)
 
 ![](hw01_gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
+
+### Global Average Gross Domestic Product (GDP) Per Capita for 1952-2007 (5 year intervals)
+
+![](hw01_gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
