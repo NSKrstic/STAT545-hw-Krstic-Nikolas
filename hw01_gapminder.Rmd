@@ -24,13 +24,19 @@ tail(gapminder)
 ```
 
 ###Dataset structure
-```{r}
+```{r, echo=F}
 str(gapminder)
 ```
 
 ###Summary statistics of the variables
-```{r}
+```{r, echo=F}
 summary(gapminder)
+```
+
+###Average Global Life Expectancy for 1952-2007 (5 year intervals)
+```{r, echo=F, message=F, warning=F}
+gapminder2 = aggregate(gapminder, by=list(gapminder$year), FUN=mean)
+plot(gapminder2$year, gapminder2$lifeExp, ylab = "Life Expectancy", xlab="Year", col="red", pch=16)
 ```
 
 

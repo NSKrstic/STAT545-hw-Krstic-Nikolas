@@ -32,10 +32,6 @@ Exploring the gapminder dataset
 
 ### Dataset structure
 
-``` r
-str(gapminder)
-```
-
     ## Classes 'tbl_df', 'tbl' and 'data.frame':    1704 obs. of  6 variables:
     ##  $ country  : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
     ##  $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...
@@ -45,10 +41,6 @@ str(gapminder)
     ##  $ gdpPercap: num  779 821 853 836 740 ...
 
 ### Summary statistics of the variables
-
-``` r
-summary(gapminder)
-```
 
     ##         country        continent        year         lifeExp     
     ##  Afghanistan:  12   Africa  :624   Min.   :1952   Min.   :23.60  
@@ -65,4 +57,8 @@ summary(gapminder)
     ##  Mean   :2.960e+07   Mean   :  7215.3  
     ##  3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
     ##  Max.   :1.319e+09   Max.   :113523.1  
-    ##
+    ## 
+
+### Average Global Life Expectancy for 1952-2007 (5 year intervals)
+
+![](hw01_gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
