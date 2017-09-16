@@ -26,16 +26,17 @@
 
 ## Favourite Fictional Universe
 
-![__**GUESS!**__](https://i.imgur.com/Fpkz2Va.gif)
+![](https://i.imgur.com/Fpkz2Va.gif)
 
+__**GUESS!**__
 
 ## How Changes to README.md Were Made
 
 > To edit README.md, I went with the second approach. This involved pulling,
 > editting locally, saving, comitting and pushing back to github.com. I primarily
 > have prior experience working with Git from STAT 450. Combined with the
-> refresher I got from the previous classes, I didn't encounter too many problems
-> and overall felt it was straightforward.
+> refresher I got from our previous STAT 545 classes, I didn't encounter too many
+> problems. It felt pretty easy to go through the steps.
 >
 > I should note though that merge conflicts were a major problem in STAT 450 when
 > working with collaborators. This resulted in difficulty pushing to the
