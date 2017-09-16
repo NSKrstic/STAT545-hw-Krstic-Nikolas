@@ -1,0 +1,36 @@
+---
+title: "Gapminder Data Exploration"
+author: "Nikolas Krstic"
+date: "September 15, 2017"
+output: github_document
+keep_md: yes
+---
+
+##Exploring the gapminder dataset
+
+```{r, echo=F, message=F}
+library(tidyverse)
+library(gapminder)
+```
+
+###The first few observations
+```{r, echo=F}
+head(gapminder)
+```
+
+###The last few observations
+```{r, echo=F}
+tail(gapminder)
+```
+
+###Dataset structure
+```{r}
+str(gapminder)
+```
+
+###Summary statistics of the variables
+```{r}
+summary(gapminder)
+```
+
+
