@@ -9,13 +9,8 @@ keep_md: yes
 ## Load necessary packages/data
 
 ```{r}
-install.packages("gapminder")
 library(gapminder)
-
-install.packages("tidyverse")
 library(tidyverse)
-
-install.packages("knitr")
 library(knitr)
 ```
 
@@ -61,7 +56,7 @@ str(gapminder)
 
 
 ```{r}
-knitr::kable(gapminder$country, caption="Frequency Table of Country")
+kable(summary(gapminder$country), caption="Frequency Table of Country")
 ```
 
 
