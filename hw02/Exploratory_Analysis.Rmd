@@ -45,6 +45,7 @@ str(gapminder)
 ```
 
 __The data type of each variable:__
+
 * country: Factor
 * continent: Factor
 * year: Integer
@@ -55,29 +56,50 @@ __The data type of each variable:__
 
 ## Explore individual variables
 
-
-__General Summary Statistics__
-```{r}
-summary(gapminder)
-```
-
-__Frequency table of "continent" variable found within the dataset__
+__Frequency table of "continent" variable__
 ```{r}
 kable(t(as.matrix(table(gapminder$continent))))
 ```
 
-__Frequency table of "continent" variable found within the dataset__
+
+__Frequency table of "country" variable__
 ```{r}
 kable(t(as.matrix(table(gapminder$country))))
 ```
 
+__Frequency table of "year" variable__
+```{r}
+kable(t(as.matrix(table(gapminder$year))))
+```
+
+__Summary Statistics of "lifeExp" variable__
+```{r}
+LE_SS = gapminder %>%
+  summarize(Minimum = min(lifeExp), Maximum = max(lifeExp),
+            Mean = mean(lifeExp), SD = sd(lifeExp))
+
+kable(LE_SS)
+```
 
 
+__Summary Statistics of "gdpPercap" variable__
+```{r}
+GPC_SS = gapminder %>%
+  summarize(Minimum = min(gdpPercap), Maximum = max(gdpPercap),
+            Mean = mean(gdpPercap), SD = sd(gdpPercap))
+
+kable(GPC_SS)
+```
 
 
+__Summary Statistics of "pop" variable__
+```{r}
+POP_SS = gapminder %>%
+  summarize(Minimum = min(pop), Maximum = max(pop),
+            Mean = mean(pop), SD = sd(pop))
 
-
-
+kable(POP_SS)
+```
 
 
 
