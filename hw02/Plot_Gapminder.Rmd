@@ -1,1 +1,14 @@
+---
+title: "Plot Gapminder"
+author: "Nikolas Krstic"
+date: "September 15, 2017"
+output: github_document
+keep_md: yes
+---
 
+## Load necessary packages/data
+
+```{r}
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+```

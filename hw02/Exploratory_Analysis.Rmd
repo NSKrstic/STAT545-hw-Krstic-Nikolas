@@ -9,54 +9,66 @@ keep_md: yes
 ## Load necessary packages/data
 
 ```{r}
-library(gapminder)
-library(tidyverse)
-library(knitr)
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
 ```
 
-## Explore "gapminder"
+
+## Explore full "gapminder" dataset
 
 
-Gapminder is a list
+__Gapminder is a list__
 ```{r}
 typeof(gapminder)
 ```
 
-Gapminder is a tibble (can also be considered a data.frame)
+__Gapminder is a tibble (can also be considered a data.frame)__
 ```{r}
 class(gapminder)
 ```
 
-Gapminder has 6 columns/variables
+__Gapminder has 6 columns/variables__
 ```{r}
 ncol(gapminder)
 ```
 
-Gapminder has 1704 rows/observations
+__Gapminder has 1704 rows/observations__
 ```{r}
 nrow(gapminder)
 ```
 
-A few other functions that can be applied to get the gapminder dimensions
+__Another few functions that can be applied to get the gapminder dimensions. Particularly useful if handling data that's not necessarily two dimensional (arrays, etc.). Also, "str" provides information on the class of each variable.__
 ```{r}
 dim(gapminder)
-```
-
-The data type of each variable:
-- country: Factor
-- continent: Factor
-- year: Integer
-- lifeExp: Numeric
-- pop: Integer
-- gdpPercap: Numeric
-
-```{r}
 str(gapminder)
 ```
 
+__The data type of each variable:__
+* country: Factor
+* continent: Factor
+* year: Integer
+* lifeExp: Double
+* pop: Integer
+* gdpPercap: Double
 
+
+## Explore individual variables
+
+
+__General Summary Statistics__
 ```{r}
-kable(summary(gapminder$country), caption="Frequency Table of Country")
+summary(gapminder)
+```
+
+__Frequency table of "continent" variable found within the dataset__
+```{r}
+kable(t(as.matrix(table(gapminder$continent))))
+```
+
+__Frequency table of "continent" variable found within the dataset__
+```{r}
+kable(t(as.matrix(table(gapminder$country))))
 ```
 
 
