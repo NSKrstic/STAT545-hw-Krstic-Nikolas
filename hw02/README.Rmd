@@ -7,6 +7,7 @@ Overall, coding to explore the dataset wasn't too difficult. The only trouble I 
 
 ## Plot_Gapminder Process
 
+Relatively straightforward, generating each of the plots. Had to refresh my memory on some other things that you can modify in ggplot (like how to change labels, adjust font size, etc.) using some online ggplot resources.
 
 ## Additional Question
 
