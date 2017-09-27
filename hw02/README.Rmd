@@ -10,13 +10,13 @@ Overall, coding to explore the dataset wasn't too difficult. The only trouble I 
 
 ## Additional Question
 
-  filter(gapminder, country == c("Rwanda", "Afghanistan"))
+    filter(gapminder, country == c("Rwanda", "Afghanistan"))
 
 The above code actually "fails", because it does not get every observation for "Rwanda" and "Afghanistan". Instead, because "country" and c("Rwanda", "Afghanistan") are vectors of different length. The second vector is copied multiple times to achieve the same length as the first vector (if possible), resulting in pairwise matching between "country" and c("Rwanda", "Afghanistan", "Rwanda", "Afghanistan", ......). Thus we end up with only a fraction of our desired data subset.
 
 This was not the intent of the code. Instead, the proper way to go about getting all observations from Rwanda and Afghanistan is:
 
-  filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+    filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
 
 This line of code checks each component of the vector (gapminder$country) to see if they exist within the vector of countries provided ("Rwanda" and "Afghanistan").
 

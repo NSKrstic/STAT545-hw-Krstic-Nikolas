@@ -1,23 +1,22 @@
----
-title: "Plot Gapminder"
-author: "Nikolas Krstic"
-date: "September 15, 2017"
-output: github_document
-keep_md: yes
----
+Plot Gapminder
+================
+Nikolas Krstic
+September 15, 2017
 
-## Load necessary packages/data
+Load necessary packages/data
+----------------------------
 
-```{r}
+``` r
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(tidyverse))
 ```
 
-
-## Gapminder Plots
+Gapminder Plots
+---------------
 
 ### Boxplot of Population vs. European Countries
-```{r, plot.width=12}
+
+``` r
 gapminder %>%
   filter(continent == "Europe") %>%
   select(country, pop) %>%
@@ -28,9 +27,11 @@ gapminder %>%
   geom_boxplot()
 ```
 
+![](Plot_Gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-1.png)
 
 ### Time Series of Life Expectancy in American Countries
-```{r, fig.width=10}
+
+``` r
 gapminder %>%
   filter(continent == "Americas") %>%
   select(-gdpPercap, -pop) %>%
@@ -41,16 +42,11 @@ gapminder %>%
   geom_line()
 ```
 
-
-
-
-
-
-
-
+![](Plot_Gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-3-1.png)
 
 ### Scatterplots of Log(GDP Per Capita) against Life Expectancy of Asian Countries Since 1980 (with Lines of Best Fit)
-```{r, fig.width=9}
+
+``` r
 gapminder %>%
   filter(continent == "Asia", year %in% seq(1982, 2007, 5)) %>%
   select(-pop, -country) %>%
@@ -64,8 +60,4 @@ gapminder %>%
   geom_smooth(se=F, method="lm")
 ```
 
-
-
-
-
-
+![](Plot_Gapminder_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-4-1.png)
