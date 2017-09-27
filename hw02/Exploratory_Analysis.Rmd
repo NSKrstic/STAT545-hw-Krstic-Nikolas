@@ -18,22 +18,22 @@ suppressPackageStartupMessages(library(knitr))
 ## Explore full "gapminder" dataset
 
 
-__Gapminder is a list__
+#### Gapminder is a list
 ```{r}
 typeof(gapminder)
 ```
 
-__Gapminder is a tibble (can also be considered a data.frame)__
+#### Gapminder is a tibble (can also be considered a data.frame)
 ```{r}
 class(gapminder)
 ```
 
-__Gapminder has 6 columns/variables__
+#### Gapminder has 6 columns/variables
 ```{r}
 ncol(gapminder)
 ```
 
-__Gapminder has 1704 rows/observations__
+#### Gapminder has 1704 rows/observations
 ```{r}
 nrow(gapminder)
 ```
@@ -44,7 +44,7 @@ dim(gapminder)
 str(gapminder)
 ```
 
-__The data type of each variable:__
+#### The data type of each variable:
 
 * country: Factor
 * continent: Factor
@@ -56,23 +56,23 @@ __The data type of each variable:__
 
 ## Explore individual variables
 
-__Frequency table of "continent" variable__
+#### Frequency table of "continent" variable
 ```{r}
 kable(t(as.matrix(table(gapminder$continent))))
 ```
 
 
-__Frequency table of "country" variable__
+#### Frequency table of "country" variable
 ```{r}
 kable(t(as.matrix(table(gapminder$country))))
 ```
 
-__Frequency table of "year" variable__
+#### Frequency table of "year" variable
 ```{r}
 kable(t(as.matrix(table(gapminder$year))))
 ```
 
-__Summary Statistics of "lifeExp" variable__
+#### Summary Statistics of "lifeExp" variable
 ```{r}
 LE_SS = gapminder %>%
   summarize(Minimum = min(lifeExp), Maximum = max(lifeExp),
@@ -82,7 +82,7 @@ kable(LE_SS)
 ```
 
 
-__Summary Statistics of "gdpPercap" variable__
+#### Summary Statistics of "gdpPercap" variable
 ```{r}
 GPC_SS = gapminder %>%
   summarize(Minimum = min(gdpPercap), Maximum = max(gdpPercap),
@@ -92,7 +92,7 @@ kable(GPC_SS)
 ```
 
 
-__Summary Statistics of "pop" variable__
+#### Summary Statistics of "pop" variable
 ```{r}
 POP_SS = gapminder %>%
   summarize(Minimum = min(pop), Maximum = max(pop),
