@@ -1,0 +1,57 @@
+---
+title: "Further Gapminder Exploration"
+author: "Nikolas Krstic"
+date: "September 30, 2017"
+output: github_document
+keep_md: yes
+---
+
+## Load necessary packages/data
+
+```{r}
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(reshape))
+```
+
+
+## Maximum and Minimum GDP Per Capita for each Continent
+
+```{r}
+GDP_MM = gapminder %>%
+  select(continent, gdpPercap) %>%
+  group_by(continent) %>%
+  summarize(min_gpc = min(gdpPercap), max_gpc = max(gdpPercap))
+
+kable(GDP_MM, col.names=c("Continent", "Min. GDP Per Capita", "Max. GDP Per Capita"))
+```
+
+```{r}
+GDP_MM_2 = melt(as.data.frame(GDP_MM), id=c("continent"))
+
+GDP_MM_2 %>%
+  ggplot(aes(x=continent, y=value, fill=variable)) +
+  geom_bar(stat="identity", position="dodge") +
+  scale_fill_discrete(name="Extreme",
+                      labels=c("Minimum", "Maximum")) +
+  labs(x="Continent", y="Log of GDP Per Capita") +
+  scale_y_log10()
+```
+
+The plot shows that Asia has a wide range of GDP Per Capita, with the different between minimum and maximum GDP Per Capita being the largest among all the continents. Oceania seems to have the smallest difference, but this is likely due to only 2 countries being included within the dataset (Australia and New Zealand)
+
+
+## Spread of GDP Per Capita within each Continent
+
+```{r}
+GDP_Spread = gapminder %>%
+  select(continent, gdpPercap) %>%
+  group_by(continent) %>%
+  summarize(sd = sd(gdpPercap), IQR = IQR(gdpPercap))
+
+kable(GDP_Spread, col.names=c("Continent", "Standard Deviation of GDP Per Capita", "IQR of GDP Per Capita"))
+```
+
+
+
