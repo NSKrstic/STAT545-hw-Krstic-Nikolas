@@ -13,12 +13,13 @@ suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(reshape))
+suppressPackageStartupMessages(library(reshape2))
 ```
 
 
 ## Maximum and Minimum GDP Per Capita for each Continent
 
-```{r}
+```{r results='asis'}
 GDP_MM = gapminder %>%
   select(continent, gdpPercap) %>%
   group_by(continent) %>%
@@ -28,18 +29,20 @@ kable(GDP_MM, col.names=c("Continent", "Min. GDP Per Capita", "Max. GDP Per Capi
 ```
 
 ```{r}
+#Need to melt the dataframe to allow for side-by-side barplot
 GDP_MM_2 = melt(as.data.frame(GDP_MM), id=c("continent"))
 
 GDP_MM_2 %>%
   ggplot(aes(x=continent, y=value, fill=variable)) +
+  theme_bw() +
   geom_bar(stat="identity", position="dodge") +
   scale_fill_discrete(name="Extreme",
                       labels=c("Minimum", "Maximum")) +
-  labs(x="Continent", y="Log of GDP Per Capita") +
+  labs(x="Continent", y="GDP Per Capita") +
   scale_y_log10()
 ```
 
-The plot shows that Asia has a wide range of GDP Per Capita, with the different between minimum and maximum GDP Per Capita being the largest among all the continents. Oceania seems to have the smallest difference, but this is likely due to only 2 countries being included within the dataset (Australia and New Zealand)
+The plot shows that Asia has a wide range of GDP Per Capita, with the difference between minimum and maximum GDP Per Capita being the largest among all the continents. Oceania seems to have the smallest difference, but this is likely due to only 2 countries being included within the dataset (Australia and New Zealand)
 
 
 ## Spread of GDP Per Capita within each Continent
@@ -52,6 +55,60 @@ GDP_Spread = gapminder %>%
 
 kable(GDP_Spread, col.names=c("Continent", "Standard Deviation of GDP Per Capita", "IQR of GDP Per Capita"))
 ```
+
+```{r}
+gapminder %>%
+  ggplot(aes(x=continent, y=gdpPercap)) +
+  theme_bw() +
+  geom_boxplot() +
+  labs(x="Continent", y="GDP Per Capita") +
+  scale_y_log10()
+```
+
+The spread of GDP Per Capita for Asia and Europe are particularly high compared to the others. Since the y-axis is on a log scale and according to the table, Europe has very large IQR, while both Asia and Europe have large standard deviations.
+
+
+## Population-weighted Mean of Global Life Expectancy for each Year
+
+```{r}
+LE_MeanW = gapminder %>%
+  select(lifeExp, year, pop) %>%
+  group_by(year) %>%
+  summarize(mean_weighted_lifeExp = weighted.mean(lifeExp, pop))
+
+kable(LE_MeanW, col.names=c("Year", "Population-weighted Mean of Global Life Expectancy"))
+```
+
+```{r}
+LE_MeanW %>%
+  ggplot(aes(x=year, y=mean_weighted_lifeExp)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method="lm", se=F) +
+  labs(x="Year", y="Population-weighted Mean of Global Life Expectancy")
+```
+
+From the graph, we can see that global life expectancy has been steadily increasing over the years, with the blue line of best fit indicating the overal gradient for this dataset. It's interesting to see the plateau from 1957 to 1962, however. Further investigation may be required to see why that occurred, perhaps because of the various wars that occurred during that time period.
+
+
+## Mean Continental Life Expecatancy over Time
+
+```{r}
+LE_MeanC = gapminder %>%
+  select(continent, lifeExp, year) %>%
+  group_by(continent, year) %>%
+  summarize(mean_lifeExp = mean(lifeExp))
+
+LE_MeanC_2 = dcast(LE_MeanC, continent ~ year)
+
+kable(LE_MeanC_2, col.names=c("Continent", as.character(seq(1952, 2007, by=5))))
+```
+
+```{r}
+
+```
+
+
 
 
 
