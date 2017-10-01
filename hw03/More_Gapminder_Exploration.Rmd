@@ -82,6 +82,7 @@ kable(LE_MeanW, col.names=c("Year", "Population-weighted Mean of Global Life Exp
 ```{r}
 LE_MeanW %>%
   ggplot(aes(x=year, y=mean_weighted_lifeExp)) +
+  theme_bw() +
   geom_line() +
   geom_point() +
   geom_smooth(method="lm", se=F) +
@@ -105,10 +106,53 @@ kable(LE_MeanC_2, col.names=c("Continent", as.character(seq(1952, 2007, by=5))))
 ```
 
 ```{r}
-
+LE_MeanC %>%
+  ggplot(aes(x=year, y=mean_lifeExp)) +
+  theme_bw() +
+  facet_wrap(~continent) +
+  geom_line() +
+  geom_point() +
+  labs(x="Year", y="Mean Life Expectancy") +
+  theme(strip.background = element_rect(fill=c("red")))
 ```
 
+From the graph, we can see that Europe and Oceania have had relatively high mean life expectancy over the years, gradually increasing. The Americas and Asia have pretty steep slopes, indicating the life expectancy was initially somewhat low, and has increased significantly over time. Africa had experienced increasing life expectancy up until the mid 80s, where it has now leveled off mostly.
 
 
+## Relative Abundance of Countries with Low Life Expectancy for each Continent.
 
+```{r}
+# We'll use the mean global life expectancy (population-weighted) computed earlier as our benchmark, with any values below it being considered as low life expectancy.
+
+LE_RA = gapminder %>%
+  select(continent, country, lifeExp, year) %>%
+  group_by(continent, country, year) %>%
+  summarize(mean_lifeExp = mean(lifeExp)) %>%
+  #Merge data with the mean life expectancies calculated before
+  merge(LE_MeanW, by=c("year"), all.x=T) %>%
+  #Create Boolean column, indicating if a country for a given year had low life
+  #expectancy
+  transmute(continent, country, year, Low_LifeExp = mean_lifeExp<mean_weighted_lifeExp) %>%
+  group_by(year, continent) %>%
+  #Count high or low life expectancy countries
+  summarize(Low_count = sum(Low_LifeExp), High_count = sum(!Low_LifeExp)) %>%
+  #Calculate percentages
+  mutate(per_low_le = (Low_count)/(Low_count+High_count)*100) %>%
+  select(-Low_count, -High_count) %>%
+  arrange(continent)
+
+kable(LE_RA, col.names=c("Year", "Continent", "Percentage of Countries with Low Life Expectancy"))
+```
+
+```{r}
+LE_RA %>%
+  ggplot(aes(x=year, y=per_low_le)) +
+  theme_bw() +
+  facet_wrap(~continent) +
+  geom_bar(stat="identity") +
+  labs(x="Year", y="Percentage of Low Life Expectancy Countries") +
+  theme(strip.background = element_rect(fill=c("green")))
+```
+
+We can see from both the table and the graphs that Africa has had a high proportion of countries with a mean life expectancy below the global average over the years. Europe and Oceania though have had pretty high life expectancies across almost all countries over the years. Asia has 50% fewer low life expectancy countries since 1952 and the Americas has 75% fewer low life expectancy countries since 1952, which is pretty interesting.
 
