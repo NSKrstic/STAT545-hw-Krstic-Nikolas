@@ -156,3 +156,16 @@ LE_RA %>%
 
 We can see from both the table and the graphs that Africa has had a high proportion of countries with a mean life expectancy below the global average over the years. Europe and Oceania though have had pretty high life expectancies across almost all countries over the years. Asia has 50% fewer low life expectancy countries since 1952 and the Americas has 75% fewer low life expectancy countries since 1952, which is pretty interesting.
 
+
+
+## Report on Process
+
+Overall, using dplyr and ggplot2 wasn't too difficult. I also decided to incorporate some use of the reshape/reshape2 packages to better manipulate the data ("melt" and "dcast" functions). This allowed me to produce better tables and graphs, in my opinion. 
+
+For the fifth plot, I was trying to make the bars colourful and representing relative percentages between low and high life expectancy countries. Each bar would reach 100%, but a fraction of the bar would be coloured to indicate the fraction of low life expectancy countries. However, I wasn't sure what the best approach to this was, as I only really know how to do it with factors and the fill parameter.
+
+I did struggle a bit trying to figure out how to make the tables and graphs adjacent to one another, attempting to emulate the example provided. It may be that there's more to it than I was able to see, and I'm still interested in knowing how to do so.
+
+
+
+
