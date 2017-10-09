@@ -2,7 +2,8 @@
 title: "Gapminder_Join_and_Reshape"
 author: "Nikolas Krstic"
 date: "October 7, 2017"
-output: html_document
+output: github_document
+keep_md: yes
 ---
 
 ```{r}
@@ -11,6 +12,7 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(reshape))
 suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(kableExtra))
 ```
 
 ## Data Reshaping
@@ -92,6 +94,80 @@ This problem was a little more complicated to approach. Initially, I had only ap
 
 
 ## Data Joining
+
+#### Activity 1: Gapminder Data Joining
+
+```{r}
+chosen_countries = c("United Kingdom", "Spain", "France",
+                        "Germany", "Serbia", "Italy", "Sweden")
+
+New_DF = data.frame(country = c("United Kingdom", "Spain", "France", "Germany", "Serbia", "Italy", "Sweden"), Language = c("English", "Spanish", "French", "German", "Serbian", "Italian", "Swedish"), Capital = c("London", "Madrid", "Paris", "Berlin", "Belgrade", "Rome", "Stockholm"), NATO_Member = c("Yes", "Yes", "Yes", "Yes", "No", "Yes", "No"))
+
+Old_DF = gapminder %>%
+  filter(country %in% chosen_countries)
+```
+
+
+##### left_join
+```{r}
+kable(left_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"left_join" preserves the columns and rows of the first data frame, while matching up new columns from the second data frame
+
+##### right_join
+```{r}
+kable(right_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"right_join" preserves the columns and rows of the second data frame, while matching up new columns from the first data frame
+
+##### inner_join
+```{r}
+kable(inner_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"inner_join" preserves the columns between both data frames, but only keeps rows that have matching values between the data frames (kind of like an intersection).
+
+##### full_join
+```{r}
+kable(full_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"full_join" preserves both the columns and rows between both data frames (kind of like a union)
+
+##### semi_join
+```{r}
+kable(semi_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"semi_join" preserves only the columns of the first data frame, and only keeps the specific rows of the first data frame if they match up with the second data frame
+
+##### anti_join
+```{r}
+kable(anti_join(Old_DF, New_DF), format="html") %>%
+  kable_styling() %>%
+  scroll_box(width = "1000px", height = "500px")
+```
+
+"anti_join" preserves only the columns of the first data frame, and only keeps the specific rows of the first data frame if they DON'T match up with the second data frame
+
+
+## Activity 3: Looking at "merge" and "match"
+
+
+
+
 
 
 
