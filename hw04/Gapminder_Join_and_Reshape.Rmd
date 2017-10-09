@@ -1,0 +1,98 @@
+---
+title: "Gapminder_Join_and_Reshape"
+author: "Nikolas Krstic"
+date: "October 7, 2017"
+output: html_document
+---
+
+```{r}
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(reshape))
+suppressPackageStartupMessages(library(reshape2))
+```
+
+## Data Reshaping
+
+#### Activity 2: Annual Life Expectancy for Multiple Countries
+
+```{r}
+chosen_countries = c("United Kingdom", "Spain", "France",
+                        "Germany", "Serbia", "Italy", "Sweden")
+
+lifeExp_countries = gapminder %>%
+  filter(country %in% chosen_countries) %>%
+  select(country, lifeExp, year) %>%
+  group_by(country, year) %>%
+  summarize(mean_lifeExp = mean(lifeExp)) %>%
+  dcast(year ~ country)
+
+kable(lifeExp_countries, col.names = c("Year", names(lifeExp_countries)[2:ncol(lifeExp_countries)]))
+```
+
+```{r}
+lifeExp_countries %>%
+  ggplot(aes(x=Serbia, y=Sweden)) +
+  theme_bw() +
+  geom_point(colour="red") +
+  geom_line() +
+  labs(x="Life Expectancy in Serbia", y="Life Expectancy in Sweden", title="Life Expectancy during 1952-2007")
+```
+
+
+#### Activity 3: Annual Maximum Life Expectancy within each Continent
+
+```{r}
+lifeExp_continents = gapminder %>%
+  select(continent, lifeExp, year) %>%
+  group_by(continent, year) %>%
+  summarize(max_lifeExp = max(lifeExp)) %>%
+  dcast(year ~ continent)
+
+kable(lifeExp_continents, col.names = c("Year", names(lifeExp_continents)[2:ncol(lifeExp_continents)]))
+```
+
+```{r}
+lifeExp_continents %>%
+  select(-year) %>%
+  plot(las=2, pch=16)
+```
+
+So, what's advantageous about this wide data format is that it's somewhat easier to generate pairwise combinations of each of the continents, to examine the trends in each of the scatterplots.
+
+I was attempting to figure out whether there's a good way to implement this via ggplot, but it seems that ggplot typically accepts data in the long data format. It's possible to do so with one pair (as done in the previous section), but performing multiple combinations is somewhat messy.
+
+
+#### Activity 4: Minimum and Maximum Life Expectancies in each Continent
+
+```{r}
+LE_Table = gapminder %>%
+  select(year, continent, country, lifeExp) %>%
+  group_by(year, continent) %>%
+  filter(min_rank(desc(lifeExp)) < 2 | min_rank(lifeExp) < 2) %>% 
+  arrange(year, continent) %>%
+  #Generate boolean to identify min and max LEs
+  mutate(max_bool = ifelse(max(lifeExp) == lifeExp, "Max_LE", "Min_LE")) %>%
+  #dcast on this boolean, causes some NAs to pop up initially
+  dcast(year+continent+country ~ max_bool, value.var="lifeExp") %>%
+  #Repeate boolean generation on which country had the max or min LE
+  mutate(max_bool = ifelse(!is.na(Max_LE), "Max_Country", "Min_Country")) %>%
+  #dcast on this boolean too, results in disjoint NAs between the four columns made
+  dcast(year+continent+Max_LE+Min_LE ~ max_bool, value.var="country") %>%
+  group_by(year, continent) %>%
+  #summarize across the rows to remove the NAs and combine the rows together
+  summarize_all(funs(na.omit(.))) %>%
+  arrange(continent, continent)
+
+kable(LE_Table, col.names=c("Year", "Continent", "Max_LE", "Min_LE", "Country_with_Max_LE", "Country_with_Min_LE"))
+```
+
+This problem was a little more complicated to approach. Initially, I had only applied dcast to the table, but this resulted in many NA values (Countries were columns and the values were the life expectancies) and generally looked messy. The end result that I wanted was 4 columns, each indicating the min or max life expectancy or the country that had min or max life expectancy. There might be a more efficient way of doing that, but what I have done is pretty good and clear.
+
+
+## Data Joining
+
+
+
+
