@@ -2,7 +2,7 @@
 title: "Gapminder_Join_and_Reshape"
 author: "Nikolas Krstic"
 date: "October 7, 2017"
-output: html_document
+output: github_document
 keep_md: yes
 ---
 
@@ -99,9 +99,9 @@ This problem was a little more complicated to approach. Initially, I had only ap
 
 ```{r}
 chosen_countries = c("United Kingdom", "Spain", "France",
-                        "Germany", "Serbia", "Italy", "Sweden")
+                        "Germany", "Serbia", "Italy", "Sweden", "Russia")
 
-New_DF = data.frame(country = c("United Kingdom", "Spain", "France", "Germany", "Serbia", "Italy", "Sweden"), Language = c("English", "Spanish", "French", "German", "Serbian", "Italian", "Swedish"), Capital = c("London", "Madrid", "Paris", "Berlin", "Belgrade", "Rome", "Stockholm"), NATO_Member = c("Yes", "Yes", "Yes", "Yes", "No", "Yes", "No"))
+New_DF = data.frame(country = c("United Kingdom", "Spain", "France", "Germany", "Serbia", "Italy", "Sweden", "Russia"), Language = c("English", "Spanish", "French", "German", "Serbian", "Italian", "Swedish", "Russian"), Capital = c("London", "Madrid", "Paris", "Berlin", "Belgrade", "Rome", "Stockholm", "Moscow"), NATO_Member = c("Yes", "Yes", "Yes", "Yes", "No", "Yes", "No", "No"))
 
 Old_DF = gapminder %>%
   filter(country %in% chosen_countries, year==2007)
