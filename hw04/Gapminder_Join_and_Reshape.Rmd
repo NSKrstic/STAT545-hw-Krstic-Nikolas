@@ -2,7 +2,7 @@
 title: "Gapminder_Join_and_Reshape"
 author: "Nikolas Krstic"
 date: "October 7, 2017"
-output: github_document
+output: html_document
 keep_md: yes
 ---
 
@@ -112,7 +112,7 @@ Old_DF = gapminder %>%
 ```{r}
 kable(left_join(Old_DF, New_DF), format="html") %>%
   kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+  scroll_box(width = "1000px", height = "300px")
 ```
 
 "left_join" preserves the columns and rows of the first data frame, while matching up new columns from the second data frame
