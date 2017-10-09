@@ -17,7 +17,7 @@ suppressPackageStartupMessages(library(kableExtra))
 
 ## Data Reshaping
 
-#### Activity 2: Annual Life Expectancy for Multiple Countries
+### Activity 2: Annual Life Expectancy for Multiple Countries
 
 ```{r}
 chosen_countries = c("United Kingdom", "Spain", "France",
@@ -43,7 +43,7 @@ lifeExp_countries %>%
 ```
 
 
-#### Activity 3: Annual Maximum Life Expectancy within each Continent
+### Activity 3: Annual Maximum Life Expectancy within each Continent
 
 ```{r}
 lifeExp_continents = gapminder %>%
@@ -66,7 +66,7 @@ So, what's advantageous about this wide data format is that it's somewhat easier
 I was attempting to figure out whether there's a good way to implement this via ggplot, but it seems that ggplot typically accepts data in the long data format. It's possible to do so with one pair (as done in the previous section), but performing multiple combinations is somewhat messy.
 
 
-#### Activity 4: Minimum and Maximum Life Expectancies in each Continent
+### Activity 4: Minimum and Maximum Life Expectancies in each Continent
 
 ```{r}
 LE_Table = gapminder %>%
@@ -95,7 +95,7 @@ This problem was a little more complicated to approach. Initially, I had only ap
 
 ## Data Joining
 
-#### Activity 1: Gapminder Data Joining
+### Activity 1: Gapminder Data Joining
 
 ```{r}
 chosen_countries = c("United Kingdom", "Spain", "France",
@@ -104,66 +104,70 @@ chosen_countries = c("United Kingdom", "Spain", "France",
 New_DF = data.frame(country = c("United Kingdom", "Spain", "France", "Germany", "Serbia", "Italy", "Sweden"), Language = c("English", "Spanish", "French", "German", "Serbian", "Italian", "Swedish"), Capital = c("London", "Madrid", "Paris", "Berlin", "Belgrade", "Rome", "Stockholm"), NATO_Member = c("Yes", "Yes", "Yes", "Yes", "No", "Yes", "No"))
 
 Old_DF = gapminder %>%
-  filter(country %in% chosen_countries)
+  filter(country %in% chosen_countries, year==2007)
+
+kable(New_DF)
 ```
 
 
-##### left_join
-```{r}
-kable(left_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "300px")
-```
+#### left_join
 
 "left_join" preserves the columns and rows of the first data frame, while matching up new columns from the second data frame
-
-##### right_join
 ```{r}
-kable(right_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+kable(left_join(Old_DF, New_DF))
 ```
 
+
+#### right_join
 "right_join" preserves the columns and rows of the second data frame, while matching up new columns from the first data frame
-
-##### inner_join
 ```{r}
-kable(inner_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+kable(right_join(Old_DF, New_DF))
 ```
 
+
+#### inner_join
 "inner_join" preserves the columns between both data frames, but only keeps rows that have matching values between the data frames (kind of like an intersection).
-
-##### full_join
 ```{r}
-kable(full_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+kable(inner_join(Old_DF, New_DF))
 ```
 
+
+#### full_join
 "full_join" preserves both the columns and rows between both data frames (kind of like a union)
-
-##### semi_join
 ```{r}
-kable(semi_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+kable(full_join(Old_DF, New_DF))
 ```
 
+
+#### semi_join
 "semi_join" preserves only the columns of the first data frame, and only keeps the specific rows of the first data frame if they match up with the second data frame
-
-##### anti_join
 ```{r}
-kable(anti_join(Old_DF, New_DF), format="html") %>%
-  kable_styling() %>%
-  scroll_box(width = "1000px", height = "500px")
+kable(semi_join(Old_DF, New_DF))
 ```
 
+
+#### anti_join
 "anti_join" preserves only the columns of the first data frame, and only keeps the specific rows of the first data frame if they DON'T match up with the second data frame
+```{r}
+kable(anti_join(Old_DF, New_DF))
+```
 
 
-## Activity 3: Looking at "merge" and "match"
+NOTE: I spent a lot of time trying to figure out how to put the above data frames into scroll boxes so that they don't take so much space on the page.  However, I can't seem to do so, since I think this can only be done via the HTML format. Instead, I've resorted to filtering down the original gapminder to only the year 2007. Slightly disappointing.
+
+### Activity 3: Looking at "merge" and "match"
+
+```{r}
+merge(Old_DF, New_DF, by="country", all=T)
+```
+
+merge is pretty similar to the other joins. Setting the argument "all" to TRUE, then this is similar to full_join. Setting it to FALSE is similar to using inner_join. Then using all.x or all.y (setting one to TRUE and the other to FALSE) is similar to using left_join or right_join. I don't believe there is an equivalent to semi_join or anti_join for merge.
+
+```{r}
+match(Old_DF$country, New_DF$country)
+```
+
+match, on the other hand, compares two vectors and indicates the position at which each component of the first vector matches up with the second. This is similar to anti_join and semi_join in that we can use the output of match to filter any mismatches out. However, it has minimal similarity to the merge function.
 
 
 
