@@ -396,3 +396,10 @@ match(Old_DF$country, New_DF$country)
     ## [1] 3 4 6 5 2 7 1
 
 match, on the other hand, compares two vectors and indicates the position at which each component of the first vector matches up with the second. This is similar to anti\_join and semi\_join in that we can use the output of match to filter any mismatches out. However, it has minimal similarity to the merge function.
+
+Report on process
+-----------------
+
+Overall, what I struggled most with was trying to figure out how make scrolling boxes for the tables made from kable. I spent quite some time and it seems that it requires some tinkering with HTML code, which I have minimal familiarity with. Also, Activity 4 for the Data Reshaping was particularly challenging, but I was able to work it out after reviewing the documentation of dcast and spread.
+
+I feel like I have a stronger grasp on the data reshaping and join functions.
