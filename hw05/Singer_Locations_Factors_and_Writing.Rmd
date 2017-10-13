@@ -1,0 +1,61 @@
+---
+title: "Singer_Locations_Factors_and_Writing"
+author: "Nikolas Krstic"
+date: "October 13, 2017"
+output: github_document
+keep_md: yes
+---
+
+```{r}
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(reshape))
+suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(forcats))
+suppressPackageStartupMessages(library(devtools))
+suppressPackageStartupMessages(library(singer))
+suppressPackageStartupMessages(library(forcats))
+```
+
+
+## Factor Management
+
+```{r}
+data("singer_locations")
+```
+
+We're going to factorise on the following variables: artist_name, name and city. This is because of the following information we have on the unique values of each of the categorical variables (that are not identifiers):
+```{r}
+#10100
+nrow(singer_locations)
+#9799, too high and close to nrow value, not useful to factorise
+length(unique(singer_locations$title))
+#9049, too high again
+length(unique(singer_locations$release))
+#7498, acceptable because of absence of NAs
+length(unique(singer_locations$artist_name))
+#2913, good enough
+length(unique(singer_locations$name))
+#1317, good enough as well
+length(unique(singer_locations$release))
+```
+
+#### Check for NA count
+```{r}
+sum(is.na(singer_locations$name))
+sum(is.na(singer_locations$artist_name))
+sum(is.na(singer_locations$city))
+```
+
+
+
+
+
+
+
+
+
+
+
