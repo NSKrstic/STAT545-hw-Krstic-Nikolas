@@ -233,7 +233,7 @@ ggsave(paste(getwd(), "/Plots/Mean_Artist_Familiarity_Plot.pdf", sep=""), plot=n
 ```
 
 
-The embed doesn't seem to work, and I'm not entirely sure why. I would rather not put my local drive information in order to get this to work, however. You can find the plot in the corresponding folder, nevertheless
+The embed doesn't seem to work, and I'm not entirely sure why. I would rather not put my local drive information in order to get this to work, however. You can find the plot in the corresponding folder "STAT545-hw-Krstic-Nikolas/hw05/Plots/Mean_Artist_Familiarity_Plot.pdf".
 
 Saving our plot in the vector format (.pdf, .eps) because it provides the best resolution for graphs in general. Raster format is useful for photographs and other detailed visuals, but can potentially provide poorer resolution.
 
@@ -247,9 +247,10 @@ By not specifying the plot argument, ggsave will automatically save the last plo
 sl_new8 <- sl_new3 %>%
   filter(city_factor %in% c(levels(city_factor)[1:10])) %>%
   droplevels() %>%
-  mutate(state = fct_recode(city_factor, "NA" = "Missing Information", "Illinois" = "Chicago, IL", "New York" = "New York, NY", "Michigan" = "Detroit, MI", "California" = "Oxnard, CA", "California" = "Los Angeles, CA", "New York" = "Staten Island, NY"))
+  mutate(state = fct_recode(city_factor, "NA" = "Missing Information", "Illinois" = "Chicago, IL", "New York" = "New York, NY", "Michigan" = "Detroit, MI", "California" = "Oxnard, CA", "California" = "Los Angeles, CA", "New York" = "Staten Island, NY")) %>%
+  select(city_factor, state)
 
-kable(head(sl_new8, n=30))
+kable(head(sl_new8, n=20))
 ```
 
 Created the factor for the states of a handful of cities. May become tedious to have to recode every single factor level when generating the new factor.
