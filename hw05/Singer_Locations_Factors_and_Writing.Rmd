@@ -27,7 +27,7 @@ data("singer_locations")
 ```
 
 We're going to factorise on the following variables: artist_name, name and city. This is because of the following information we have on the unique values of each of the categorical variables (that are not identifiers):
-```{r, echo=FALSE}
+```{r}
 #10100
 nrow(singer_locations)
 #9799, too high and close to nrow value, not useful to factorise
@@ -174,5 +174,96 @@ str(sl_new5)
 head(levels(sl_new5$city_factor), n=10)
 ```
 It appears that the factor (and its reordered levels) were preserved with dput
+
+### Visualization Design
+
+```{r}
+sl_new6 <- sl_new3 %>%
+  group_by(city_factor) %>%
+  summarize(mean_artist_familiarity = mean(artist_familiarity)) %>%
+  mutate(city_factor = fct_reorder(city_factor, mean_artist_familiarity, max)) %>%
+  filter(mean_artist_familiarity>0.85)
+
+sl_new6 %>%
+  ggplot(aes(x=city_factor, y=mean_artist_familiarity)) +
+  theme_bw() +
+  geom_point() +
+  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=0.4)) +
+  labs(x="City", y="Artist Hotness", title="Cities with the Most Familiar Artists")
+```
+
+The factor along the x-axis appears to be ordered in the figure appropriately based on our reordering (based on maximum of mean artist familiarity).
+
+```{r}
+sl_new7 <- sl_new3 %>%
+  group_by(city_factor) %>%
+  summarize(mean_artist_familiarity = mean(artist_familiarity)) %>%
+  arrange(mean_artist_familiarity) %>%
+  filter(mean_artist_familiarity>0.85)
+
+sl_new7 %>%
+  ggplot(aes(x=city_factor, y=mean_artist_familiarity)) +
+  theme_bw() +
+  geom_point() +
+  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=0.4)) +
+  labs(x="City", y="Artist Hotness", title="Cities with the Most Familiar Artists")
+```
+
+However, in contrast, using only "arrange" to attempt to reorganize the appearance of the figure doesn't work
+
+```{r}
+#Use the previous dataframe that had the reordered city factor
+new_plot = sl_new6 %>%
+  arrange(mean_artist_familiarity) %>%
+  ggplot(aes(x=city_factor, y=mean_artist_familiarity)) +
+  theme_bw() +
+  geom_point() +
+  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=0.4)) +
+  labs(x="City", y="Artist Hotness", title="Cities with the Most Familiar Artists")
+
+new_plot
+```
+
+Combining "arrange" with reordering of the factor does result in the same plot as just performing the reordering, so we can conclude that arranging the data has no effect on the plot.
+
+### Writing Figures to File
+
+```{r}
+ggsave(paste(getwd(), "/Plots/Mean_Artist_Familiarity_Plot.pdf", sep=""), plot=new_plot, height=6)
+```
+
+
+The embed doesn't seem to work, and I'm not entirely sure why. I would rather not put my local drive information in order to get this to work, however. You can find the plot in the corresponding folder, nevertheless
+
+Saving our plot in the vector format (.pdf, .eps) because it provides the best resolution for graphs in general. Raster format is useful for photographs and other detailed visuals, but can potentially provide poorer resolution.
+
+Went with most of the default options because they are often the best.
+
+By not specifying the plot argument, ggsave will automatically save the last plot that was displayed, and therefore it's important to specify the plot you would like to save.
+
+### But I want to do More:
+
+```{r}
+sl_new8 <- sl_new3 %>%
+  filter(city_factor %in% c(levels(city_factor)[1:10])) %>%
+  droplevels() %>%
+  mutate(state = fct_recode(city_factor, "NA" = "Missing Information", "Illinois" = "Chicago, IL", "New York" = "New York, NY", "Michigan" = "Detroit, MI", "California" = "Oxnard, CA", "California" = "Los Angeles, CA", "New York" = "Staten Island, NY"))
+
+kable(head(sl_new8, n=30))
+```
+
+Created the factor for the states of a handful of cities. May become tedious to have to recode every single factor level when generating the new factor.
+
+
+### Report on Process
+
+Encountered a few challenges, namely trying to embed an image within the report. I was unsuccessful and I'm not sure if it's required that I point to the file directly on my local drive (that doesn't make sense to me). However, it insists the file doesn't exist if I don't specify the full path (even with the work directory set to within this project)
+
+Otherwise, I feel like I had a good grasp on how factors worked before this week, but now I have a better understanding of how to manipulate them with dplyr, which I was originally inexperienced with before this class.
+
+Also, it seems that write_csv is generally better than write.csv, which I used fairly often. What's good about it is that it doesn't write the row names as well. This is useful because consistent reading and writing without proper data cleaning would result in multiple columns of row names, which was annoying.
+
+
+
 
 
