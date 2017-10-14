@@ -27,7 +27,7 @@ data("singer_locations")
 ```
 
 We're going to factorise on the following variables: artist_name, name and city. This is because of the following information we have on the unique values of each of the categorical variables (that are not identifiers):
-```{r}
+```{r, echo=FALSE}
 #10100
 nrow(singer_locations)
 #9799, too high and close to nrow value, not useful to factorise
@@ -44,18 +44,135 @@ length(unique(singer_locations$release))
 
 #### Check for NA count
 ```{r}
+#5968
 sum(is.na(singer_locations$name))
+#0
 sum(is.na(singer_locations$artist_name))
+#5971
 sum(is.na(singer_locations$city))
 ```
 
+### Factorisation
+```{r}
+#Replace any NAs present with "Missing Information", to allow us to use as_factor
+sl_new <- singer_locations %>%
+  mutate(name = ifelse(is.na(singer_locations$name), "Missing Information", singer_locations$name), artist_name = ifelse(is.na(singer_locations$artist_name), "Missing Information", singer_locations$artist_name), city = ifelse(is.na(singer_locations$city), "Missing Information", singer_locations$city))
+
+sl_new <- sl_new %>%
+  mutate(name_factor = as_factor(sl_new$name), artist_name_factor = as_factor(sl_new$artist_name), city_factor = as_factor(sl_new$city))
+```
+
+It should be noted that as_factor sets the levels in the order that they first appear in the data, while as.factor sets the levels in alphabetical order. A serious drawback to as_factor though is that the NAs within a variable hinder its ability to factorise. This is not a problem with as.factor, and usually you will end up changing the order of factor levels, regardless of whether you use either function.
+
+#### Name of specific singer
+```{r}
+#Number of levels
+nlevels(sl_new$name_factor)
+
+#Some sample levels
+head(levels(sl_new$name_factor), n=10)
+```
 
 
+#### Artist name (can be band/singer/artist/etc.)
+```{r}
+nlevels(sl_new$artist_name_factor)
+
+head(levels(sl_new$artist_name_factor), n=10)
+```
+
+#### City
+```{r}
+nlevels(sl_new$city_factor)
+
+head(levels(sl_new$city_factor), n=10)
+```
 
 
+### Removal of year 0 from dataset and drop factor levels
+```{r}
+sl_new2 <- sl_new %>%
+  filter(year != 0) %>%
+  droplevels()
 
+nrow(sl_new2)
+```
 
+We had 100 observations that were year 0. We examine how the factors have changed as well.
 
+#### Name of specific singer
+```{r}
+#Number of levels
+nlevels(sl_new2$name_factor)
 
+#Some sample levels
+head(levels(sl_new2$name_factor), n=10)
+```
+
+We have 34 levels that were dropped.
+
+#### Artist name (can be band/singer/artist/etc.)
+```{r}
+nlevels(sl_new2$artist_name_factor)
+
+head(levels(sl_new2$artist_name_factor), n=10)
+```
+
+We have 90 levels that were dropped.
+
+#### City
+```{r}
+nlevels(sl_new2$city_factor)
+
+head(levels(sl_new2$city_factor), n=10)
+```
+
+We have 8 levels that were dropped.
+
+### Reordering the levels of arist_name_factor by maximum artist_familiarity
+
+```{r}
+sl_new3 <- sl_new2 %>%
+  mutate(artist_name_factor = fct_reorder(artist_name_factor, artist_familiarity, max))
+
+head(levels(sl_new3$artist_name_factor), n=10)
+```
+Factor levels have been reordered.
+
+### Writing and Reading to File
+
+```{r}
+sl_new4 <- sl_new3 %>%
+  mutate(city_factor = fct_reorder(city_factor, artist_familiarity, max)) %>%
+  group_by(city_factor) %>%
+  summarize(mean_artist_hotttnesss = mean(artist_hotttnesss))
+
+head(levels(sl_new4$city_factor), n=10)
+
+write_csv(sl_new4, paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+sl_new5 <- read_csv(paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+
+str(sl_new5)
+```
+
+It appears that the factor was not preserved with write_csv
+
+```{r}
+saveRDS(sl_new4, paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+sl_new5 <- readRDS(paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+
+str(sl_new5)
+head(levels(sl_new5$city_factor), n=10)
+```
+It appears that the factor (and its reordered levels) were preserved with saveRDS
+
+```{r}
+dput(sl_new4, paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+sl_new5 <- dget(paste(getwd(), "/Data/Artist_Hotness_Data.csv", sep=""))
+
+str(sl_new5)
+head(levels(sl_new5$city_factor), n=10)
+```
+It appears that the factor (and its reordered levels) were preserved with dput
 
 
